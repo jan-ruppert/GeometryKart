@@ -573,6 +573,39 @@
                     "action": "steer",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "Horizontal Axis",
+                    "id": "93097b48-956b-45ff-a8a0-d0e785ebe399",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "steer",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "fdade86a-2611-4b35-9e27-977227cc8a39",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "steer",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "bd58d216-c549-456e-8571-f5db3c414e8c",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "steer",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         }
