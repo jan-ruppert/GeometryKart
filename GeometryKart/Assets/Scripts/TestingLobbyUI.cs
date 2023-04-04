@@ -14,13 +14,13 @@ public class TestingLobbyUI : MonoBehaviour
     {
         createGameButton.onClick.AddListener((() =>
         {
-            NetworkManager.Singleton.StartHost();
+            RaceGameMultiplayer.Instance.StartHost();
             Loader.LoadNetwork(Loader.Scene.CharacterSelectScene);
         }));
         
         joinGameButton.onClick.AddListener((() =>
         {
-            NetworkManager.Singleton.StartClient();
+            RaceGameMultiplayer.Instance.StartClient();
         }));
     }
 }
