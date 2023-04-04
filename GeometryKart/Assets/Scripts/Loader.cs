@@ -8,9 +8,15 @@ public static class Loader
 {
     public enum Scene
     {
+        MainScene,
         GameScene,
         LobbyScene,
         CharacterSelectScene
+    }
+
+    public static void Load(Scene targetScene)
+    {
+        SceneManager.LoadScene(targetScene.ToString());
     }
 
     public static void LoadNetwork(Scene targetScene)
