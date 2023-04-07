@@ -4,23 +4,44 @@ using UnityEngine.SceneManagement;
 
 public class RaceGameMultiplayer : NetworkBehaviour
 {
-    private const int MAX_PLAYER_COUNT = 2;
+    private const int MAX_PLAYER_COUNT = 4;
     public static RaceGameMultiplayer Instance { get; private set; }
 
     public event EventHandler OnTryingToJoinGame;
     public event EventHandler OnFailedToJoinGame;
+    public event EventHandler OnPlayerDataNetworkListChanged;
+
+
+    private NetworkList<PlayerData> playerDataNetworkList;
 
     private void Awake()
     {
         Instance = this;
         
         DontDestroyOnLoad(gameObject);
+
+        playerDataNetworkList = new NetworkList<PlayerData>();
+        playerDataNetworkList.OnListChanged += PlayerDataNetworkList_OnOnListChanged;
+    }
+
+    private void PlayerDataNetworkList_OnOnListChanged(NetworkListEvent<PlayerData> changeevent)
+    {
+        OnPlayerDataNetworkListChanged?.Invoke(this, EventArgs.Empty);
     }
 
     public void StartHost()
     {
         NetworkManager.Singleton.ConnectionApprovalCallback += NetworkManager_ConnectionApprovalCallback;
+        NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_OnClientConnectedCallback;
         NetworkManager.Singleton.StartHost();
+    }
+
+    private void NetworkManager_OnClientConnectedCallback(ulong clientId)
+    {
+        playerDataNetworkList.Add(new PlayerData
+        {
+            clientId = clientId
+        });
     }
 
     public void StartClient()
@@ -56,5 +77,10 @@ public class RaceGameMultiplayer : NetworkBehaviour
             return;
         }
         connectionApprovalResponse.Approved = true;
+    }
+
+    public bool IsPlayerIndexConnected(int playerIndex)
+    {
+        return playerIndex < playerDataNetworkList.Count;
     }
 }
