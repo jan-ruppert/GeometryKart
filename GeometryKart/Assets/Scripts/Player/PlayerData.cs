@@ -7,6 +7,8 @@ using UnityEngine;
 public struct PlayerData : IEquatable<PlayerData>, INetworkSerializable
 {
     public ulong clientId;
+
+    public uint colorId;
     
     
     public bool Equals(PlayerData other)

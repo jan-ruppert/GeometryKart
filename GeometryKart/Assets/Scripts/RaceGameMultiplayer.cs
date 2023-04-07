@@ -1,5 +1,6 @@
 using System;
 using Unity.Netcode;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class RaceGameMultiplayer : NetworkBehaviour
@@ -13,6 +14,8 @@ public class RaceGameMultiplayer : NetworkBehaviour
 
 
     private NetworkList<PlayerData> playerDataNetworkList;
+
+    private ushort colorID;
 
     private void Awake()
     {
@@ -40,22 +43,28 @@ public class RaceGameMultiplayer : NetworkBehaviour
     {
         playerDataNetworkList.Add(new PlayerData
         {
-            clientId = clientId
+            clientId = clientId,
+            colorId = colorID
         });
+        
+        Debug.Log("client "+ clientId + ", " + colorID);
+
+        colorID++;
     }
 
     public void StartClient()
     {
-        
         OnTryingToJoinGame?.Invoke(this, EventArgs.Empty);
 
         NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_OnClientDisconnectCallback;
-        
+
         NetworkManager.Singleton.StartClient();
     }
 
     private void NetworkManager_OnClientDisconnectCallback(ulong obj)
     {
+        colorID--;
+        
         OnFailedToJoinGame?.Invoke(this, EventArgs.Empty);
     }
 
@@ -87,5 +96,23 @@ public class RaceGameMultiplayer : NetworkBehaviour
     public PlayerData GetPlayerDataFromPlayerIndex(int playerIndex)
     {
         return playerDataNetworkList[playerIndex];
+    }
+
+    public PlayerData GetPlayerDataFromClientId(ulong clientId)
+    {
+        foreach (var playerData in playerDataNetworkList)
+        {
+            if (playerData.clientId == clientId)
+            {
+                return playerData;
+            }
+        }
+
+        return default;
+    }
+
+    public PlayerData GetPlayerData()
+    {
+        return GetPlayerDataFromClientId(NetworkManager.Singleton.LocalClientId);
     }
 }

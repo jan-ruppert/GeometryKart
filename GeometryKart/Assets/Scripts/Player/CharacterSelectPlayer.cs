@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class CharacterSelectPlayer : MonoBehaviour
 {
-
     [SerializeField] private int playerIndex;
     [SerializeField] private GameObject readyGameObject;
     private void Start()

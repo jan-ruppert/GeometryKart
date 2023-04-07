@@ -4,37 +4,31 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerVisual : MonoBehaviour
+public class PlayerModel : NetworkBehaviour
 {
-    public enum CarColor
-    {
-        RED,
-        GREEN,
-        ORANGE,
-        WHITE
-    }
-
-    [SerializeField] private CarColor carColor;
-
     [SerializeField] private GameObject redCar;
     [SerializeField] private GameObject orangeCar;
     [SerializeField] private GameObject greenCar;
     [SerializeField] private GameObject whiteCar;
 
-    private void Awake()
+    private void Start()
     {
-        switch (carColor)
+        var playerData = RaceGameMultiplayer.Instance.GetPlayerDataFromClientId(OwnerClientId);
+        
+        Debug.Log("client "+ playerData.clientId + ", " + playerData.colorId + " , " + OwnerClientId);
+        
+        switch (OwnerClientId)
         {
-            case CarColor.RED:
+            case 0:
                 Instantiate(redCar,gameObject.transform.position, Quaternion.identity, gameObject.transform);
                 break;
-            case CarColor.GREEN:
+            case 1:
                 Instantiate(greenCar,gameObject.transform.position, Quaternion.identity, gameObject.transform);
                 break;
-            case CarColor.ORANGE:
+            case 2:
                 Instantiate(orangeCar,gameObject.transform.position, Quaternion.identity, gameObject.transform);
                 break;
-            case CarColor.WHITE:
+            case 3:
                 Instantiate(whiteCar,gameObject.transform.position, Quaternion.identity, gameObject.transform);
                 break;
         }
