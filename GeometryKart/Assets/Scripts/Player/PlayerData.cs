@@ -8,7 +8,7 @@ public struct PlayerData : IEquatable<PlayerData>, INetworkSerializable
 {
     public ulong clientId;
 
-    public uint colorId;
+    public ushort colorId;
     
     
     public bool Equals(PlayerData other)
@@ -19,5 +19,6 @@ public struct PlayerData : IEquatable<PlayerData>, INetworkSerializable
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {
         serializer.SerializeValue(ref clientId);
+        serializer.SerializeValue(ref colorId);
     }
 }

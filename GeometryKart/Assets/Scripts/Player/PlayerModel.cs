@@ -17,7 +17,7 @@ public class PlayerModel : NetworkBehaviour
         
         Debug.Log("client "+ playerData.clientId + ", " + playerData.colorId + " , " + OwnerClientId);
         
-        switch (OwnerClientId)
+        switch (playerData.colorId)
         {
             case 0:
                 Instantiate(redCar,gameObject.transform.position, Quaternion.identity, gameObject.transform);
