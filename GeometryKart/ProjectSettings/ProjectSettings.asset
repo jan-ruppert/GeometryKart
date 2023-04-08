@@ -856,11 +856,11 @@ PlayerSettings:
     m_VersionName: 
   apiCompatibilityLevel: 6
   activeInputHandler: 1
-  cloudProjectId: 
+  cloudProjectId: cd119505-f96c-4788-b2cb-5c301d47a137
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: 
-  organizationId: 
+  projectName: GeometryKart
+  organizationId: staubi
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   playerDataPath: 

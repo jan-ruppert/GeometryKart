@@ -12,9 +12,20 @@ public class RaceGameManager : NetworkBehaviour
 
     [SerializeField] private Transform playerPrefab;
 
+    [SerializeField] private GameObject playerSpawnParent;
+    
+    private List<Transform> playerSpawnList;
+
     private void Awake()
     {
         Instance = this;
+
+        playerSpawnList = new List<Transform>();
+
+        foreach (Transform playerSpawn in playerSpawnParent.transform)
+        {
+            playerSpawnList.Add(playerSpawn);
+        }
     }
 
     public override void OnNetworkSpawn()
@@ -31,7 +42,7 @@ public class RaceGameManager : NetworkBehaviour
     {
         foreach (var clientId in NetworkManager.Singleton.ConnectedClientsIds)
         {
-            Transform playerTransform = Instantiate(playerPrefab);
+            Transform playerTransform = Instantiate(playerPrefab, playerSpawnList[RaceGameMultiplayer.Instance.GetPlayerDataFromClientId(clientId).colorId]);
             
             playerTransform.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, true);
         }

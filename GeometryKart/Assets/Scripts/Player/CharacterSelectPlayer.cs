@@ -65,4 +65,9 @@ public class CharacterSelectPlayer : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
+
+    private void OnDestroy()
+    {
+        RaceGameMultiplayer.Instance.OnPlayerDataNetworkListChanged -= RaceGameMultiplayer_OnPlayerDataNetworkListChanged;
+    }
 }
