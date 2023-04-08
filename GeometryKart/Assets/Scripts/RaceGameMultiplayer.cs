@@ -62,8 +62,6 @@ public class RaceGameMultiplayer : NetworkBehaviour
             clientId = clientId,
             colorId = colorID
         });
-        
-        Debug.Log("client "+ clientId + ", " + colorID);
 
         colorID++;
     }
@@ -128,5 +126,12 @@ public class RaceGameMultiplayer : NetworkBehaviour
     public PlayerData GetPlayerData()
     {
         return GetPlayerDataFromClientId(NetworkManager.Singleton.LocalClientId);
+    }
+
+    public void KickPlayer(ulong clientId)
+    {
+        NetworkManager.Singleton.DisconnectClient(clientId, "You were kicked by the host!");
+
+        NetworkManager_Server_OnClientDisconnectCallback(clientId);
     }
 }

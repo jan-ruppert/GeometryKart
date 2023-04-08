@@ -14,9 +14,7 @@ public class PlayerModel : NetworkBehaviour
     private void Start()
     {
         var playerData = RaceGameMultiplayer.Instance.GetPlayerDataFromClientId(OwnerClientId);
-        
-        Debug.Log("client "+ playerData.clientId + ", " + playerData.colorId + " , " + OwnerClientId);
-        
+
         switch (playerData.colorId)
         {
             case 0:
