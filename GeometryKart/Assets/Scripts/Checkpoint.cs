@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Checkpoint : MonoBehaviour
 {
-    [SerializeField] private byte checkpointId;
+    [SerializeField] private int checkpointId;
 
-    public byte CheckpointId => checkpointId;
+    public int CheckpointId => checkpointId;
 }

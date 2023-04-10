@@ -4,16 +4,27 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerPosition : MonoBehaviour
+public class PlayerPosition : NetworkBehaviour
 {
 
-    private int currentCheckpoint;
-
-    private int currentLap;
+    private Position position;
+    
+    public Position Position => position;
 
     private void Awake()
     {
-        currentCheckpoint = Track.Instance.StartCheckpoint;
+        position = new Position(Track.Instance.StartCheckpoint, 0, 0);
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        PositionManager.Instance.Add(OwnerClientId, position);
+    }
+
+    private void Update()
+    {
+        position.DistanceToNextCheckpoint = Vector3.Distance(gameObject.transform.position,
+            CheckpointManager.Instance.GetCheckpointPositionFromId(NextCheckpoint()));
     }
 
     private void OnTriggerEnter(Collider other)
@@ -26,13 +37,18 @@ public class PlayerPosition : MonoBehaviour
 
     private void Checkpoint()
     {
-        currentCheckpoint = (currentCheckpoint + 1) % Track.Instance.NumberCheckpoints;
+        position.CurrentCheckpoint = NextCheckpoint();
 
-        if (currentCheckpoint == Track.Instance.StartCheckpoint)
+        if (position.CurrentCheckpoint == Track.Instance.StartCheckpoint)
         {
-            currentLap++;
+            position.CurrentLap++;
         }
         
-        Debug.Log("Checkpoint:" + currentCheckpoint + ", Lap: " + currentLap);
+        Debug.Log("Checkpoint:" + position.CurrentCheckpoint + ", Lap: " + position.CurrentLap);
+    }
+
+    private int NextCheckpoint()
+    {
+        return (position.CurrentCheckpoint + 1) % Track.Instance.NumberCheckpoints;
     }
 }

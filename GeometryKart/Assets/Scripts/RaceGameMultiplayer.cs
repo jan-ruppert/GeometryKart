@@ -12,7 +12,7 @@ public class RaceGameMultiplayer : NetworkBehaviour
     public event EventHandler OnFailedToJoinGame;
     public event EventHandler OnPlayerDataNetworkListChanged;
 
-
+    
     private NetworkList<PlayerData> playerDataNetworkList;
 
     private ushort colorID;
@@ -60,7 +60,8 @@ public class RaceGameMultiplayer : NetworkBehaviour
         playerDataNetworkList.Add(new PlayerData
         {
             clientId = clientId,
-            colorId = colorID
+            colorId = colorID,
+            position = colorID + 1
         });
 
         colorID++;
@@ -126,6 +127,30 @@ public class RaceGameMultiplayer : NetworkBehaviour
     public PlayerData GetPlayerData()
     {
         return GetPlayerDataFromClientId(NetworkManager.Singleton.LocalClientId);
+    }
+
+    public int GetPlayerDataIndexFromClientId(ulong clientId)
+    {
+        for (int i = 0; i < playerDataNetworkList.Count; i++)
+        {
+            if (playerDataNetworkList[i].clientId == clientId)
+            {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    public void SetPlayerPosition(int position, ulong clientId)
+    {
+        int playerDataIndex = GetPlayerDataIndexFromClientId(clientId);
+
+        PlayerData playerData = playerDataNetworkList[playerDataIndex];
+
+        playerData.position = position;
+
+        playerDataNetworkList[playerDataIndex] = playerData;
     }
 
     public void KickPlayer(ulong clientId)
