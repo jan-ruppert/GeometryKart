@@ -61,7 +61,8 @@ public class RaceGameMultiplayer : NetworkBehaviour
         {
             clientId = clientId,
             colorId = colorID,
-            position = colorID + 1
+            position = colorID + 1,
+            currentLap = 0
         });
 
         colorID++;
@@ -149,6 +150,23 @@ public class RaceGameMultiplayer : NetworkBehaviour
         PlayerData playerData = playerDataNetworkList[playerDataIndex];
 
         playerData.position = position;
+
+        playerDataNetworkList[playerDataIndex] = playerData;
+    }
+
+    public void SetPlayerLap(int lap)
+    {
+        SetPlayerLapServerRpc(lap);
+    }
+    
+    [ServerRpc(RequireOwnership = false)]
+    public void SetPlayerLapServerRpc(int lap, ServerRpcParams serverRpcParams = default)
+    {
+        int playerDataIndex = GetPlayerDataIndexFromClientId(serverRpcParams.Receive.SenderClientId);
+
+        PlayerData playerData = playerDataNetworkList[playerDataIndex];
+
+        playerData.currentLap = lap;
 
         playerDataNetworkList[playerDataIndex] = playerData;
     }

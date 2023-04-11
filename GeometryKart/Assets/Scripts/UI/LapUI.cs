@@ -3,15 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.Netcode;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class PositionUI : NetworkBehaviour
+public class LapUI : NetworkBehaviour
 {
-
-    [SerializeField] private TextMeshProUGUI positionText;
-
-
+    [SerializeField] private TextMeshProUGUI lapText;
+    
     public override void OnNetworkSpawn()
     {
         if (!IsOwner)
@@ -19,7 +16,7 @@ public class PositionUI : NetworkBehaviour
             gameObject.SetActive(false);
         }
     }
-
+    
     private void Awake()
     {
         RaceGameMultiplayer.Instance.OnPlayerDataNetworkListChanged += RaceGameMultiplayer_OnPlayerDataNetworkListChanged;
@@ -29,16 +26,11 @@ public class PositionUI : NetworkBehaviour
     {
         var playerData = RaceGameMultiplayer.Instance.GetPlayerDataFromClientId(OwnerClientId);
 
-        UpdatePositionText(playerData.position);
+        UpdateLapText(playerData.currentLap, Track.Instance.NumberLaps);
     }
 
-    public void UpdatePositionText(int position)
+    private void UpdateLapText(int currentLap, int lastLap)
     {
-        positionText.text = position + ".";
-    }
-
-    public override void OnDestroy()
-    {
-        RaceGameMultiplayer.Instance.OnPlayerDataNetworkListChanged += RaceGameMultiplayer_OnPlayerDataNetworkListChanged;
+        lapText.text = "Lap " + currentLap + "/" + lastLap;
     }
 }

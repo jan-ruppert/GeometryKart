@@ -29,7 +29,7 @@ public class PlayerPosition : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag.Equals("Checkpoint"))
+        if (other.tag.Equals("Checkpoint") && other.gameObject.GetComponent<Checkpoint>().CheckpointId == NextCheckpoint())
         {
             Checkpoint();
         }
@@ -42,6 +42,8 @@ public class PlayerPosition : NetworkBehaviour
         if (position.CurrentCheckpoint == Track.Instance.StartCheckpoint)
         {
             position.CurrentLap++;
+            
+            RaceGameMultiplayer.Instance.SetPlayerLap(position.CurrentLap);
         }
         
         Debug.Log("Checkpoint:" + position.CurrentCheckpoint + ", Lap: " + position.CurrentLap);
