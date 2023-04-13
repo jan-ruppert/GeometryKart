@@ -8,6 +8,8 @@ using UnityEngine.InputSystem;
 
 public class CarController : NetworkBehaviour
 {
+
+    private const float RESPAWN_HEIGHT = -5f;
     
     //input
     [SerializeField] private InputActionAsset inputActionAsset;
@@ -50,9 +52,10 @@ public class CarController : NetworkBehaviour
         {
             return;
         }
+        
+        Respawn();
 
         HandleMovementServerAuth();
-        //HandleMovement();
     }
 
     private void FixedUpdate()
@@ -88,22 +91,18 @@ public class CarController : NetworkBehaviour
         transform.eulerAngles = Vector3.Lerp(transform.eulerAngles, new Vector3(0, transform.eulerAngles.y + currentRotate, 0), Time.fixedDeltaTime * 5f);
     }
 
-
-    private void HandleMovement()
+    private void Respawn()
     {
-        transform.position = sphere.transform.position - new Vector3(0, sphere.GetComponent<SphereCollider>().radius, 0);
-        
-        currentSpeed = Mathf.SmoothStep(currentSpeed, acceleration * accelerateAction.ReadValue<float>(), Time.deltaTime * 12f);
-        
-        currentRotate = Mathf.Lerp(currentRotate, steeringSensitivity *  steerAction.ReadValue<float>(), Time.deltaTime * 4f);
+        RespawnServerRpc(sphere.GetComponent<PlayerPosition>().Position.CurrentCheckpoint);
     }
 
-    private void FixedHandleMovement()
-    {
-        //acceleration
-        sphere.GetComponent<Rigidbody>().AddForce(-transform.forward * currentSpeed, ForceMode.Acceleration);
-        
-        transform.eulerAngles = Vector3.Lerp(transform.eulerAngles, new Vector3(0, transform.eulerAngles.y + currentRotate, 0), Time.fixedDeltaTime * 5f);
-    }
     
+    [ServerRpc(RequireOwnership = false)]
+    private void RespawnServerRpc(int checkpointId)
+    {
+        if (sphere.transform.position.y <= RESPAWN_HEIGHT)
+        {
+            sphere.transform.position = CheckpointManager.Instance.GetCheckpointPositionFromId(checkpointId);
+        }
+    }
 }

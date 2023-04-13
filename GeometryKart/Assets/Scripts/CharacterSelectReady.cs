@@ -44,7 +44,7 @@ public class CharacterSelectReady : NetworkBehaviour
 
         if (allClientsReady)
         {
-            Loader.LoadNetwork(Loader.Scene.GameScene);
+            Loader.LoadNetwork(Loader.Scene.MapSelectScene);
         }
     }
 

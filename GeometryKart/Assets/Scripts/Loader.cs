@@ -10,8 +10,10 @@ public static class Loader
     {
         MainScene,
         GameScene,
+        TestScene,
         LobbyScene,
-        CharacterSelectScene
+        CharacterSelectScene,
+        MapSelectScene
     }
 
     public static void Load(Scene targetScene)
